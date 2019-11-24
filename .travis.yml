@@ -3,21 +3,21 @@ services:
   - docker
 
 before_install:
-  - docker build -t vladdr/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t vdrozdenko/react-test -f ./client/Dockerfile.dev ./client
 
 
 script:
-  - docker run -e CI=true vladdr/react-test npm test
+  - docker run -e CI=true vdrozdenko/react-test npm test
 
 after_success:
-  - docker build -t vladdr/multi-client ./client
-  - docker build -t vladdr/multi-nginx ./nginx
-  - docker build -t vladdr/multi-server ./server
-  - docker build -t vladdr/multi-worker ./worker
+  - docker build -t vdrozdenko/multi-client ./client
+  - docker build -t vdrozdenko/multi-nginx ./nginx
+  - docker build -t vdrozdenko/multi-server ./server
+  - docker build -t vdrozdenko/multi-worker ./worker
   #login into docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # push the images to dockerhub
-  - docker push vladdr/multi-client
-  - docker push vladdr/multi-nginx
-  - docker push vladdr/multi-server
-  - docker push vladdr/multi-worker
+  - docker push vdrozdenko/multi-client
+  - docker push vdrozdenko/multi-nginx
+  - docker push vdrozdenko/multi-server
+  - docker push vdrozdenko/multi-worker

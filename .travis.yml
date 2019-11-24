@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t vladdr/react-test -f ./client/Dockerfile.dev ./client
+
+
+script:
+  - docker run -e CI=true vladdr/react-test npm test
+
+after_success:
+  - docker build -t vladdr/multi-client ./client
+  - docker build -t vladdr/multi-nginx ./nginx
+  - docker build -t vladdr/multi-server ./server
+  - docker build -t vladdr/multi-worker ./worker
+  #login into docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push the images to dockerhub
+  - docker push vladdr/multi-client
+  - docker push vladdr/multi-nginx
+  - docker push vladdr/multi-server
+  - docker push vladdr/multi-worker
